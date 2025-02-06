@@ -31,25 +31,8 @@ jobs:
           path: target/surefire-reports/*.xml
           reporter: java-junit
 
-      # 📌 Affichage de la couverture de code directement dans GitHub
-      - name: Publish Coverage Report
-        if: always()
-        uses: dorny/test-reporter@v1
-        with:
-          name: Code Coverage
-          path: target/site/jacoco/jacoco.xml
-          reporter: jacoco
-
-      # 📌 Upload du rapport de test HTML en tant qu'artefact téléchargeable
-      - name: Upload Test Report (HTML)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-report-html
-          path: target/site/surefire-report.html
-
-      # 📌 Upload du rapport de couverture HTML en tant qu'artefact téléchargeable
-      - name: Upload Coverage Report (HTML)
+      # 📌 Upload du rapport de couverture en tant qu'artefact téléchargeable
+      - name: Upload Coverage Report (XML + HTML)
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -70,3 +53,11 @@ jobs:
         with:
           name: coverage-badge
           path: .github/badges
+
+      # 📌 Génération d'un commentaire avec la couverture dans la PR
+      - name: Report Coverage in PR
+        if: github.event_name == 'pull_request'
+        uses: romeovs/lcov-reporter-action@v0.3.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          lcov-file: target/site/jacoco/jacoco.xml
