@@ -25,6 +25,11 @@ jobs:
       - name: Run Tests with Coverage
         run: mvn clean verify
 
+      - name: Debug JaCoCo Output
+        if: always()
+        run: ls -R target/site/jacoco
+
+
       # 📌 Affichage des résultats des tests directement dans GitHub (même si des tests échouent)
       - name: Publish Test Results
         if: always()
