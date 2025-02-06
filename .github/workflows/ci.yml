@@ -1,6 +1,8 @@
 name: CI
 
-on: [ push ]
+on:
+  push:
+  pull_request:
 
 jobs:
   build:
@@ -17,19 +19,10 @@ jobs:
           java-version: '21'
           cache: 'maven'
 
-      - name: Build with Maven
-        run: mvn clean package -DskipTests
+      - name: Run Tests with Coverage
+        run: mvn clean verify
 
-      - name: Run Tests
-        run: mvn test
-
-      - name: Upload Test Reports
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-reports
-          path: target/surefire-reports/
-
+      # 📌 Affichage des résultats des tests directement dans GitHub
       - name: Publish Test Results
         if: always()
         uses: dorny/test-reporter@v1
@@ -37,3 +30,43 @@ jobs:
           name: Test Results
           path: target/surefire-reports/*.xml
           reporter: java-junit
+
+      # 📌 Affichage de la couverture de code directement dans GitHub
+      - name: Publish Coverage Report
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Code Coverage
+          path: target/site/jacoco/jacoco.xml
+          reporter: jacoco
+
+      # 📌 Upload du rapport de test HTML en tant qu'artefact téléchargeable
+      - name: Upload Test Report (HTML)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report-html
+          path: target/site/surefire-report.html
+
+      # 📌 Upload du rapport de couverture HTML en tant qu'artefact téléchargeable
+      - name: Upload Coverage Report (HTML)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-coverage-report
+          path: target/site/jacoco
+
+      # 📌 Génération d'un badge de couverture pour le README
+      - name: Generate Coverage Badge
+        if: always()
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          jacoco-csv-file: target/site/jacoco/jacoco.csv
+          badges-directory: .github/badges
+
+      # 📌 Upload du badge pour qu'il soit accessible dans le README
+      - name: Upload Coverage Badge
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-badge
+          path: .github/badges
