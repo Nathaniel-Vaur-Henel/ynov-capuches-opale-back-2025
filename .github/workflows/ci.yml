@@ -4,6 +4,11 @@ on:
   push:
   pull_request:
 
+permissions:
+  checks: write
+  pull-requests: write
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -55,7 +60,7 @@ jobs:
           path: .github/badges
 
       # 📌 Génération d'un commentaire avec la couverture dans la PR
-      - name: Report Coverage in PR
+      - name: Report Coverage in PR 📌
         if: github.event_name == 'pull_request'
         uses: romeovs/lcov-reporter-action@v0.3.1
         with:
