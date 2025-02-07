@@ -70,9 +70,10 @@ jobs:
           path: .github/badges
 
       # 📌 Génération d'un commentaire avec la couverture dans la PR
-      - name: Report Coverage in PR
-        if: github.event_name == 'pull_request' && success()
-        uses: romeovs/lcov-reporter-action@v0.3.1
+      - name: Comment Coverage on PR
+        if: github.event_name == 'pull_request'
+        uses: mikepenz/action-jacoco@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          lcov-file: target/site/jacoco/jacoco.xml
+          title: "Code Coverage"
+          paths: target/site/jacoco/jacoco.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
