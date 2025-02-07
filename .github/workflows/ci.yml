@@ -70,10 +70,10 @@ jobs:
           path: .github/badges
 
       # 📌 Génération d'un commentaire avec la couverture dans la PR
-      - name: Comment Coverage on PR
+      - name: Report Coverage in PR
         if: github.event_name == 'pull_request'
-        uses: mikepenz/action-jacoco@v3
+        uses: cicirello/jacoco-badge-generator@v2
         with:
-          title: "Code Coverage"
-          paths: target/site/jacoco/jacoco.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
+          jacoco-csv-file: target/site/jacoco/jacoco.csv
+          generate-coverage-comment: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
