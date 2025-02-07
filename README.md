@@ -1,5 +1,7 @@
 # ynov-capuches-opale-back
 
+![Coverage](https://github.com/Nathaniel-Vaur-Henel/ynov-capuches-opale-back-2025/blob/main/.github/badges/jacoco.svg)
+
 Dans le cadre du cours Coordination Back et Front, le repository Front du projet
 
 ## Liens
